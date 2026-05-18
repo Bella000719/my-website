@@ -60,10 +60,10 @@
                 
                 <p class="text-stone-500 mb-6 italic">點擊上方按鈕聆聽題目</p>
 
-                <div id="options-container" class="w-full grid grid-cols-1 gap-4">
+                <div id="options-container" class="w-full grid grid-cols-1 gap-3">
                     </div>
 
-                <button id="next-btn" class="mt-8 hidden bg-stone-800 text-white px-6 py-2 rounded-full hover:bg-stone-700">下一題</button>
+                <button id="next-btn" class="mt-8 hidden bg-stone-800 text-white px-6 py-2 rounded-full hover:bg-stone-700 text-sm">下一題</button>
             </div>
         </section>
     </main>
@@ -71,13 +71,13 @@
     <script>
         // 鳥類資料設定
         const birdData = [
-            { id: '1', name: '黑冠麻鷺', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/black_crowned.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/black_crowned.mp3' },
-            { id: '2', name: '喜鵲', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/magpie.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/magpie.mp3' },
-            { id: '3', name: '五色鳥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/barbet.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/barbet.mp3' },
-            { id: '4', name: '白頭翁', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/bulbul.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/bulbul.mp3' },
-            { id: '5', name: '麻雀', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/sparrow.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/sparrow.mp3' },
-            { id: '6', name: '珠頸斑鳩', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/dove.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/dove.mp3' },
-            { id: '7', name: '家八哥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/myna.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/myna.mp3' }
+            { id: '1', name: '黑冠麻鷺', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/black_crowned.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main[...]
+            { id: '2', name: '喜鵲', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/magpie.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/magpie[...]
+            { id: '3', name: '五色鳥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/barbet.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/bar[...]
+            { id: '4', name: '白頭翁', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/bulbul.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/bul[...]
+            { id: '5', name: '麻雀', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/sparrow.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/sparr[...]
+            { id: '6', name: '珠頸斑鳩', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/dove.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/do[...]
+            { id: '7', name: '家八哥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/myna.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/myna.[...]
         ];
 
         const birdGrid = document.getElementById('bird-grid');
@@ -88,6 +88,7 @@
         let currentQuizBird = null;
         let quizAudio = new Audio();
         let birdAudios = {}; // 存儲每個鳥類的音頻對象
+        let isAudioPlaying = false; // 追蹤音頻播放狀態
 
         // 1. 初始化圖鑑
         birdData.forEach(bird => {
@@ -155,6 +156,7 @@
         function startQuiz() {
             nextBtn.classList.add('hidden');
             optionsContainer.innerHTML = '';
+            isAudioPlaying = false;
             
             // 隨機選一個正確答案
             currentQuizBird = birdData[Math.floor(Math.random() * birdData.length)];
@@ -172,7 +174,7 @@
             // 渲染按鈕
             options.forEach(optName => {
                 const btn = document.createElement('button');
-                btn.className = 'w-full py-3 px-6 text-lg border-2 border-stone-200 rounded-xl hover:bg-stone-100 transition duration-200';
+                btn.className = 'w-full py-2 px-4 text-base border-2 border-stone-200 rounded-lg hover:bg-stone-100 transition duration-200';
                 btn.innerText = optName;
                 btn.onclick = () => checkAnswer(btn, optName);
                 optionsContainer.appendChild(btn);
@@ -196,8 +198,22 @@
             }
         }
 
-        // 事件監聽
-        playQuizBtn.onclick = () => quizAudio.play();
+        // 事件監聽 - 播放/停止切換
+        playQuizBtn.onclick = () => {
+            if (isAudioPlaying) {
+                quizAudio.pause();
+                isAudioPlaying = false;
+            } else {
+                quizAudio.play();
+                isAudioPlaying = true;
+            }
+        };
+
+        // 監聽音頻結束事件
+        quizAudio.addEventListener('ended', () => {
+            isAudioPlaying = false;
+        });
+
         nextBtn.onclick = startQuiz;
 
         // 頁面加載後初始化測驗
