@@ -9,7 +9,7 @@
         .bird-card:hover { transform: translateY(-5px); transition: 0.3s; }
         .correct { background-color: #10B981 !important; color: white; }
         .wrong { background-color: #EF4444 !important; color: white; }
-                .audio-controls { display: flex; gap: 0.5rem; justify-content: center; }
+        .audio-controls { display: flex; gap: 0.5rem; justify-content: center; }
         .control-btn {
             background-color: #10B981;
             hover: #059669;
@@ -71,13 +71,13 @@
     <script>
         // 鳥類資料設定
         const birdData = [
-            { id: '1', name: '黑冠麻鷺', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/black_crowned.JPG', audio: 'audio/black_crowned.mp3' },
-            { id: '2', name: '喜鵲', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/magpie.JPG', audio: 'audio/magpie.mp3' },
-            { id: '3', name: '五色鳥', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/barbet.JPG', audio: 'audio/barbet.mp3' },
-            { id: '4', name: '白頭翁', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/bulbul.JPG', audio: 'audio/bulbul.mp3' },
-            { id: '5', name: '麻雀', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/sparrow.JPG', audio: 'audio/sparrow.mp3' },
-            { id: '6', name: '珠頸斑鳩', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/dove.JPG', audio: 'audio/dove.mp3' },
-            { id: '7', name: '家八哥', img: 'https://raw.githubusercontent.com/u11317018-stack/my-website/main/img/myna.JPG', audio: 'audio/myna.mp3' }
+            { id: '1', name: '黑冠麻鷺', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/black_crowned.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/black_crowned.mp3' },
+            { id: '2', name: '喜鵲', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/magpie.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/magpie.mp3' },
+            { id: '3', name: '五色鳥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/barbet.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/barbet.mp3' },
+            { id: '4', name: '白頭翁', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/bulbul.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/bulbul.mp3' },
+            { id: '5', name: '麻雀', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/sparrow.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/sparrow.mp3' },
+            { id: '6', name: '珠頸斑鳩', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/dove.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/dove.mp3' },
+            { id: '7', name: '家八哥', img: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/img/myna.JPG', audio: 'https://raw.githubusercontent.com/mingpnyy/my-website/main/audio/myna.mp3' }
         ];
 
         const birdGrid = document.getElementById('bird-grid');
@@ -91,27 +91,16 @@
 
         // 1. 初始化圖鑑
         birdData.forEach(bird => {
-            const card = document.createElement('div');
-            card.className = 'bird-card bg-white rounded-xl overflow-hidden shadow-md cursor-pointer border-2 border-transparent hover:border-emerald-400';
-            card.innerHTML = `
-
-             // 創建音頻對象
+            // 創建音頻對象
             const audio = new Audio(bird.audio);
             birdAudios[bird.id] = audio;
 
+            const card = document.createElement('div');
+            card.className = 'bird-card bg-white rounded-xl overflow-hidden shadow-md cursor-pointer border-2 border-transparent hover:border-emerald-400';
             card.innerHTML = `
                 <img src="${bird.img}" alt="${bird.name}" class="w-full h-48 object-cover">
                 <div class="p-4 text-center font-bold text-lg">${bird.name}</div>
-            `;
-            card.onclick = () => {
-                const audio = new Audio(bird.audio);
-                audio.play();
-            };
-            birdGrid.appendChild(card);
-        });
-
-        // 2. 測驗功能邏輯
-                        <div class="audio-controls pb-4">
+                <div class="audio-controls pb-4">
                     <button class="control-btn play-btn" data-bird-id="${bird.id}" title="播放">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
                             <path d="M8 5v14l11-7z"/>
@@ -126,7 +115,7 @@
                     </button>
                     <button class="control-btn replay-btn" data-bird-id="${bird.id}" title="重播">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-                                    <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
+                            <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
                         </svg>
                         重播
                     </button>
@@ -147,7 +136,7 @@
         document.querySelectorAll('.pause-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 e.stopPropagation();
-                        const birdId = btn.dataset.birdId;
+                const birdId = btn.dataset.birdId;
                 birdAudios[birdId].pause();
             });
         });
@@ -215,6 +204,5 @@
         window.onload = startQuiz;
 
     </script>
-  </body>
+</body>
 </html>
-   </html>
