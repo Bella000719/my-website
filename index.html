@@ -9,6 +9,28 @@
         .bird-card:hover { transform: translateY(-5px); transition: 0.3s; }
         .correct { background-color: #10B981 !important; color: white; }
         .wrong { background-color: #EF4444 !important; color: white; }
+                .audio-controls { display: flex; gap: 0.5rem; justify-content: center; }
+        .control-btn {
+            background-color: #10B981;
+            hover: #059669;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            padding: 0.5rem 1rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+        .control-btn:hover {
+            background-color: #059669;
+            transform: scale(1.05);
+        }
+        .control-btn:active {
+            transform: scale(0.95);
+        }
     </style>
 </head>
 <body class="bg-stone-50 text-stone-800 font-sans">
@@ -65,11 +87,18 @@
 
         let currentQuizBird = null;
         let quizAudio = new Audio();
+        let birdAudios = {}; // 存儲每個鳥類的音頻對象
 
         // 1. 初始化圖鑑
         birdData.forEach(bird => {
             const card = document.createElement('div');
             card.className = 'bird-card bg-white rounded-xl overflow-hidden shadow-md cursor-pointer border-2 border-transparent hover:border-emerald-400';
+            card.innerHTML = `
+
+             // 創建音頻對象
+            const audio = new Audio(bird.audio);
+            birdAudios[bird.id] = audio;
+
             card.innerHTML = `
                 <img src="${bird.img}" alt="${bird.name}" class="w-full h-48 object-cover">
                 <div class="p-4 text-center font-bold text-lg">${bird.name}</div>
@@ -82,6 +111,58 @@
         });
 
         // 2. 測驗功能邏輯
+                        <div class="audio-controls pb-4">
+                    <button class="control-btn play-btn" data-bird-id="${bird.id}" title="播放">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                        </svg>
+                        播放
+                    </button>
+                    <button class="control-btn pause-btn" data-bird-id="${bird.id}" title="暫停">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z"/>
+                        </svg>
+                        暫停
+                    </button>
+                    <button class="control-btn replay-btn" data-bird-id="${bird.id}" title="重播">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
+                                    <path d="M7 7h10v3l4-4-4-4v3H5v6h2V7zm10 10H7v-3l-4 4 4 4v-3h12v-6h-2v4z"/>
+                        </svg>
+                        重播
+                    </button>
+                </div>
+            `;
+            birdGrid.appendChild(card);
+        });
+
+        // 2. 添加音頻控制事件監聽
+        document.querySelectorAll('.play-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const birdId = btn.dataset.birdId;
+                birdAudios[birdId].play();
+            });
+        });
+
+        document.querySelectorAll('.pause-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                        const birdId = btn.dataset.birdId;
+                birdAudios[birdId].pause();
+            });
+        });
+
+        document.querySelectorAll('.replay-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const birdId = btn.dataset.birdId;
+                const audio = birdAudios[birdId];
+                audio.currentTime = 0;
+                audio.play();
+            });
+        });
+
+        // 3. 測驗功能邏輯             
         function startQuiz() {
             nextBtn.classList.add('hidden');
             optionsContainer.innerHTML = '';
@@ -134,5 +215,6 @@
         window.onload = startQuiz;
 
     </script>
-</body>
+  </body>
 </html>
+   </html>
